@@ -1,0 +1,8 @@
+#!/usr/bin/python3
+data = bytearray(open('bin', 'rb').read())
+
+data.extend(bytearray(510-len(data)))
+data.append(0x55)
+data.append(0xaa)
+
+open('bin', 'wb').write(data)
