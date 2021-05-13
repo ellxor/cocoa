@@ -110,7 +110,7 @@ _main()
                 if (x_pos == 0 || (x_pos + BALL_SIZE) == WIDTH)  x_vel = -x_vel;
                 if (y_pos == 0 || (y_pos + BALL_SIZE) == HEIGHT) y_vel = -y_vel;
 
-                // check for collsion of ball with player
+                // check for collision of ball with player
                 if ((y_pos + BALL_SIZE) == PLAYER_Y
                     && (player_x_pos <= (x_pos + BALL_SIZE))
                     && ((player_x_pos + PLAYER_WIDTH) >= x_pos))
