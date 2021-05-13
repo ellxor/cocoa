@@ -6,8 +6,6 @@ working on any IBM PC compatible architecture. Whilst the build tools used to
 make the game having only been tested on Linux, the game itself (included as 
 `bin`) is independent of any OS.
 
-                        requirements: gcc, make & qemu
-
 
                          Inspired by Tsoding's PinPog
                      (https://github.com/tsoding/pinpog)
