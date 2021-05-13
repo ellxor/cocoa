@@ -1,5 +1,4 @@
 #include <stdint.h>
-#include <stdnoreturn.h>
 
 #define BYTE uint8_t
 #define WORD uint16_t
