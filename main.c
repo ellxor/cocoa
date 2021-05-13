@@ -11,10 +11,10 @@
 static void
 initVGA()
 {
-	__asm__("mov $0x13, %%ax       \n"
-		"int $0x10             \n"
-		"mov $0xA000, %%ax     \n"
-        	"mov %%ax, %%es"
+        __asm__("mov $0x13, %%ax       \n"
+                "int $0x10             \n"
+                "mov $0xA000, %%ax     \n"
+                "mov %%ax, %%es"
                 :
                 : : "ax");
 }
@@ -22,10 +22,10 @@ initVGA()
 static void
 putpixel(WORD x, WORD y, BYTE color)
 {
-	WORD i = WIDTH * y + x;
+        WORD i = WIDTH * y + x;
 
-	__asm__("mov  %1, %%di     \n"
-	 	"movb %0, %%es:(%%di)"
+        __asm__("mov  %1, %%di     \n"
+                "movb %0, %%es:(%%di)"
                 :
                 : "r"(color), "r"(i)
                 : "di");
@@ -81,7 +81,7 @@ read_key()
 extern void
 _main()
 {
-	initVGA();
+        initVGA();
 
         #define BACKGROUND_COLOR        0x00
         #define PLAYER_COLOR            0x60
