@@ -1,2 +1,3 @@
-main.o
 main.s
+pong.s
+pong.o
