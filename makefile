@@ -1,4 +1,4 @@
-default: main.c
+bin: main.c
 	gcc -S main.c -m16 -Os -Wextra			# compile C to 16-bit asm
 	echo "jmp _main" | cat - main.s > pong.s	# prepend jmp _main
 	gcc -c pong.s -m16				# compile asm to object file
