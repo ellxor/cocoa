@@ -1,0 +1,13 @@
+                                     pong
+
+pong is a boot sector game written in C99. The challenge was to fit a playable
+game inside a 512-byte MBR (master boot record). The game is ultra-portable,
+working on any IBM PC compatible architecture. Whilst the build tools used to
+make the game having only been tested on Linux, the game itself (included as 
+`bin`) is independent of any OS.
+
+                        requirements: gcc, make & qemu
+
+
+                         Inspired by Tsoding's PinPog
+                     (https://github.com/tsoding/pinpog)
