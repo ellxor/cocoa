@@ -62,14 +62,11 @@ read_key()
 
         __asm__("mov $1, %%ah           \n"
                 "int $0x16              \n"
-                "jz fail                \n"
+                "mov %%al, %0           \n"
+                "jz end                 \n"
                 "xor %%ah, %%ah         \n"
                 "int $0x16              \n"
-                "jmp end                \n"
-                "fail:                  \n"
-                "xor %%al, %%al         \n"
                 "end:                   \n"
-                "mov %%al, %0"
 
                 : "=r"(key_code)
                 : : "ax");
