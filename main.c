@@ -133,16 +133,13 @@ _main()
                 render_rect(x_pos, y_pos, BALL_SIZE, BALL_SIZE, BALL_COLOR);
                 render_score(score);
 
-
                 // increment
                 x_pos += x_vel;
                 y_pos += y_vel;
 
-
                 // check for collision of ball with border
                 if (x_pos == 0 || (x_pos + BALL_SIZE) == WIDTH)  x_vel = -x_vel;
                 if (y_pos == 0 || (y_pos + BALL_SIZE) == HEIGHT) y_vel = -y_vel;
-
 
                 // check for collision of ball with player
                 if ((y_pos + BALL_SIZE) == PLAYER_Y
@@ -154,7 +151,6 @@ _main()
                         ++score;
                 }
 
-
                 // user-input
                 BYTE code = read_key();
 
@@ -165,7 +161,6 @@ _main()
                 if (code == 'd' && (player_x_pos != (WIDTH - PLAYER_WIDTH))) {
                         player_x_pos += PLAYER_VEL;
                 }
-
 
                 // loop-hook
                 game_over = (y_pos + BALL_SIZE == HEIGHT);
