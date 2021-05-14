@@ -41,6 +41,33 @@ render_rect(WORD x, WORD y, WORD width, WORD height, BYTE color)
 }
 
 static void
+render_score(BYTE score)
+{
+        #define TEXT_COLOR 0x08
+
+        BYTE hi = '0' + (score / 10),
+             lo = '0' + (score % 10);
+
+        // set cursor pos
+        __asm__("mov  $2, %ah           \n"
+                "xor %bh, %bh           \n"
+                "mov $0x1800, %dx       \n"
+                "int $0x10");
+
+        // render chars
+        __asm__("mov   $0x0E, %%ah      \n"
+                "xor    %%bh, %%bh      \n"
+                "mov      %2, %%bl      \n"
+                "mov      %0, %%al      \n"
+                "int   $0x10            \n"
+                "mov      %1, %%al      \n"
+                "int   $0x10"
+                :
+                : "r"(hi), "r"(lo), "i"(TEXT_COLOR)
+                : "ax", "bx");
+}
+
+static void
 sleep(uint32_t usec)
 {
         WORD lo = usec;
@@ -88,6 +115,7 @@ _main()
         #define BALL_COLOR              0x38
         #define BALL_SIZE               10
         #define BALL_VEL                2
+        #define TEXT_HEIGHT             8
 
         uint32_t FPS = 60;
 
@@ -98,14 +126,17 @@ _main()
 
         WORD player_x_pos = 0;
         BYTE game_over;
+        BYTE score = 0;
 
         do {
                 render_rect(player_x_pos, PLAYER_Y, PLAYER_WIDTH, PLAYER_HEIGHT, PLAYER_COLOR);
                 render_rect(x_pos, y_pos, BALL_SIZE, BALL_SIZE, BALL_COLOR);
+                render_score(score);
 
                 // check for collision of ball with border
                 if (x_pos == 0 || (x_pos + BALL_SIZE) == WIDTH)  x_vel = -x_vel;
                 if (y_pos == 0 || (y_pos + BALL_SIZE) == HEIGHT) y_vel = -y_vel;
+
 
                 // check for collision of ball with player
                 if ((y_pos + BALL_SIZE) == PLAYER_Y
@@ -114,7 +145,9 @@ _main()
                 {
                         y_vel = -y_vel;
                         FPS += 5;
+                        ++score;
                 }
+                
 
                 // user-input
                 BYTE code = read_key();
@@ -127,14 +160,23 @@ _main()
                         player_x_pos += PLAYER_VEL;
                 }
 
+
                 // increment
                 x_pos += x_vel;
                 y_pos += y_vel;
 
                 game_over = (y_pos + BALL_SIZE >= HEIGHT);
-
                 sleep(SECOND / FPS);
-                render_rect(0, 0, WIDTH, HEIGHT, BACKGROUND_COLOR);
+
+                // only re-render over text if necessary
+                WORD RENDER_HEIGHT = HEIGHT;
+
+                if (y_pos < (HEIGHT - TEXT_HEIGHT - BALL_SIZE)) {
+                        RENDER_HEIGHT -= TEXT_HEIGHT;
+                }
+
+                // clear screen
+                render_rect(0, 0, WIDTH, RENDER_HEIGHT, BACKGROUND_COLOR);
         }
         while (!game_over);
 
