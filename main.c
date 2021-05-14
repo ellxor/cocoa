@@ -85,10 +85,10 @@ sleep(uint32_t usec)
 static WORD
 rand()
 {
-        WORD rnd;
+        volatile WORD rnd;
 
-        __asm__("xor %%ah, %%ah\n"
-                "int $0x1A\n"
+        __asm__("xor %%ah, %%ah         \n"
+                "int $0x1A              \n"
                 "mov %%dx, %0"
 
                 : "=r"(rnd)
@@ -135,7 +135,7 @@ _main()
 
         uint32_t FPS = 60;
 
-        WORD x_pos = 10 * (rand() % (WIDTH / 10));
+        WORD x_pos = BALL_SIZE * ((rand() % (WIDTH / BALL_SIZE)) & ~1);
         WORD y_pos = 0;
         WORD x_vel = BALL_VEL;
         WORD y_vel = BALL_VEL;
@@ -148,6 +148,7 @@ _main()
                 render_rect(player_x_pos, PLAYER_Y, PLAYER_WIDTH, PLAYER_HEIGHT, PLAYER_COLOR);
                 render_rect(x_pos, y_pos, BALL_SIZE, BALL_SIZE, BALL_COLOR);
                 render_score(score);
+
 
                 // increment
                 x_pos += x_vel;
@@ -173,17 +174,17 @@ _main()
                 // user-input
                 BYTE code = read_key();
 
-                if (code == 'a' && player_x_pos >= PLAYER_VEL) {
+                if (code == 'a' && player_x_pos != 0) {
                         player_x_pos -= PLAYER_VEL;
                 }
 
-                if (code == 'd' && (player_x_pos + PLAYER_WIDTH) <= (WIDTH - PLAYER_VEL)) {
+                if (code == 'd' && (player_x_pos != (WIDTH - PLAYER_WIDTH))) {
                         player_x_pos += PLAYER_VEL;
                 }
 
 
                 // loop-hook
-                game_over = (y_pos + BALL_SIZE >= HEIGHT);
+                game_over = (y_pos + BALL_SIZE == HEIGHT);
                 sleep(SECOND / FPS);
 
                 // only re-render over text if necessary
