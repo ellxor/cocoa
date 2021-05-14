@@ -87,7 +87,7 @@ _main()
         #define PLAYER_WIDTH            80
         #define PLAYER_HEIGHT           2
         #define PLAYER_Y                150
-        #define PlAYER_VEL              10
+        #define PLAYER_VEL              10
         #define BALL_COLOR              0x38
         #define BALL_SIZE               10
         #define BALL_VEL                2
@@ -122,12 +122,12 @@ _main()
                 // user-input
                 BYTE code = read_key();
 
-                if (code == 'a' && player_x_pos >= PlAYER_VEL) {
-                        player_x_pos -= PlAYER_VEL;
+                if (code == 'a' && player_x_pos >= PLAYER_VEL) {
+                        player_x_pos -= PLAYER_VEL;
                 }
 
-                if (code == 'd' && (player_x_pos + PLAYER_WIDTH) <= (WIDTH - PlAYER_VEL)) {
-                        player_x_pos += PlAYER_VEL;
+                if (code == 'd' && (player_x_pos + PLAYER_WIDTH) <= (WIDTH - PLAYER_VEL)) {
+                        player_x_pos += PLAYER_VEL;
                 }
 
                 // increment
