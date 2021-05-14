@@ -11,4 +11,4 @@ run: bin
 	qemu-system-x86_64 -drive format=raw,file=bin
 
 clean:
-	rm -rf main.s pong.s pong.o bin
+	rm -rf main.s pong.s pong.o
