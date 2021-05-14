@@ -82,6 +82,22 @@ sleep(uint32_t usec)
                 : "ax", "cx", "dx");
 }
 
+static WORD
+rand()
+{
+        WORD rnd;
+
+        __asm__("xor %%ah, %%ah\n"
+                "int $0x1A\n"
+                "mov %%dx, %0"
+
+                : "=r"(rnd)
+                :
+                : "ax", "cx", "dx");
+
+        return rnd;
+}
+
 static BYTE
 read_key()
 {
@@ -119,12 +135,12 @@ _main()
 
         uint32_t FPS = 60;
 
-        WORD x_pos = 0;
+        WORD x_pos = 10 * (rand() % (WIDTH / 10));
         WORD y_pos = 0;
-        WORD x_vel = -BALL_VEL;
-        WORD y_vel = -BALL_VEL;
+        WORD x_vel = BALL_VEL;
+        WORD y_vel = BALL_VEL;
 
-        WORD player_x_pos = 0;
+        WORD player_x_pos = (WIDTH - PLAYER_WIDTH)/2;
         BYTE game_over;
         BYTE score = 0;
 
@@ -132,6 +148,11 @@ _main()
                 render_rect(player_x_pos, PLAYER_Y, PLAYER_WIDTH, PLAYER_HEIGHT, PLAYER_COLOR);
                 render_rect(x_pos, y_pos, BALL_SIZE, BALL_SIZE, BALL_COLOR);
                 render_score(score);
+
+                // increment
+                x_pos += x_vel;
+                y_pos += y_vel;
+
 
                 // check for collision of ball with border
                 if (x_pos == 0 || (x_pos + BALL_SIZE) == WIDTH)  x_vel = -x_vel;
@@ -147,7 +168,7 @@ _main()
                         FPS += 5;
                         ++score;
                 }
-                
+
 
                 // user-input
                 BYTE code = read_key();
@@ -161,10 +182,7 @@ _main()
                 }
 
 
-                // increment
-                x_pos += x_vel;
-                y_pos += y_vel;
-
+                // loop-hook
                 game_over = (y_pos + BALL_SIZE >= HEIGHT);
                 sleep(SECOND / FPS);
 
