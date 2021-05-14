@@ -82,22 +82,6 @@ sleep(uint32_t usec)
                 : "ax", "cx", "dx");
 }
 
-static WORD
-rand()
-{
-        volatile WORD rnd;
-
-        __asm__("xor %%ah, %%ah         \n"
-                "int $0x1A              \n"
-                "mov %%dx, %0"
-
-                : "=r"(rnd)
-                :
-                : "ax", "cx", "dx");
-
-        return rnd;
-}
-
 static BYTE
 read_key()
 {
@@ -135,12 +119,12 @@ _main()
 
         uint32_t FPS = 60;
 
-        WORD x_pos = BALL_SIZE * ((rand() % (WIDTH / BALL_SIZE)) & ~1);
+        WORD x_pos = 0;
         WORD y_pos = 0;
         WORD x_vel = BALL_VEL;
         WORD y_vel = BALL_VEL;
 
-        WORD player_x_pos = (WIDTH - PLAYER_WIDTH)/2;
+        WORD player_x_pos = 0;
         BYTE game_over;
         BYTE score = 0;
 
